@@ -172,6 +172,8 @@ AddHydrogens::bndord = "Bond orders `` must be a list of \"\[ScriptS]\", \"\[Scr
 
 AddHydrogens::badhyb = "Hybridization for atoms `` could not be computed."; 
 
+ShowMolecule::nncoord = "Nonnumeric value encountered in AtomCoordinates."; 
+
 Begin["`Private`"] (* Begin Private Context *) 
 ClearAll[Evaluate[Context[]<>"*"]]
 
@@ -646,6 +648,11 @@ ShowMolecule[mol_Association, OptionsPattern[{ShowMolecule, Graphics3D}]] :=
 			_, 
 				Message[ShowMolecule::opttfa, "ShowAxes", showAxes]; 
 				Return[$Failed]
+			];
+
+		If[!MatchQ[coords, {{__?NumberQ}..}], 
+			Message[ShowMolecule::nncoord];
+			Return[$Failed]
 			];
 
 		centroid = Mean @ coords;
